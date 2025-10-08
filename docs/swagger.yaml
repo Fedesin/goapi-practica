@@ -1,0 +1,87 @@
+basePath: /
+definitions:
+  main.Usuario:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      nombre:
+        type: string
+      password:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: fsimone@unlu.edu.ar
+    name: Federico Simone
+  description: API de ejemplo con registro, login y JWT.
+  title: API de Usuarios Go
+  version: "1.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Retorna token JWT
+      parameters:
+      - description: Email y Password
+        in: body
+        name: credenciales
+        required: true
+        schema:
+          $ref: '#/definitions/main.Usuario'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Login de usuario
+  /perfil:
+    get:
+      description: Devuelve información del usuario autenticado
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Usuario'
+      security:
+      - BearerAuth: []
+      summary: Perfil del usuario
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Crea un nuevo usuario
+      parameters:
+      - description: Datos del usuario
+        in: body
+        name: usuario
+        required: true
+        schema:
+          $ref: '#/definitions/main.Usuario'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Usuario'
+      summary: Registro de usuario
+schemes:
+- http
+securityDefinitions:
+  BearerAuth:
+    description: 'Ingresa el token JWT con el prefijo "Bearer ". Ejemplo: "Bearer
+      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
